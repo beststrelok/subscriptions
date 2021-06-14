@@ -9,10 +9,9 @@ class AppleSubscription
 {
     private SubscriptionRepository $subscriptionRepository;
 
-    public function __construct(SubscriptionRepository $subscriptionRepository, PaymentInterface $paymentApiClient)
+    public function __construct(SubscriptionRepository $subscriptionRepository)
     {
         $this->subscriptionRepository = $subscriptionRepository;
-        $this->paymentApiClient = $paymentApiClient;
     }
 
     public function processSubscription(SubscriptionDtoInterface $subDto)
@@ -22,7 +21,6 @@ class AppleSubscription
 
         switch ($subDto->getStatus()) {
             case 'INITIAL_BUY':
-                $product = $this->paymentApiClient->retrieveProduct($subscriptionId);
                 $this->subscriptionRepository->createSubscription($subscriptionId, $productId);
                 break;
             case 'DID_RENEW':
